@@ -1,0 +1,48 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "types": ".d.ts",
+  "dependencies": {
+    "@reach/router": "^1.2.1",
+    "@types/jest": "23.3.13",
+    "@types/node": "10.12.18",
+    "@types/reach__router": "^1.2.3",
+    "@types/react": "16.7.20",
+    "@types/react-bootstrap": "^0.32.15",
+    "@types/react-dom": "16.0.11",
+    "@types/reactstrap": "^7.1.0",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.2.1",
+    "braintree-web": "^3.42.0",
+    "react": "^16.7.0",
+    "react-bootstrap": "^1.0.0-beta.4",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.3",
+    "reactstrap": "^7.1.0",
+    "typescript": "3.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:8080",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@types/braintree-web": "^3.6.4",
+    "@types/react-router": "^4.4.3",
+    "babel-plugin-import": "^1.11.0",
+    "react-app-rewired": "^2.0.2"
+  }
+}
