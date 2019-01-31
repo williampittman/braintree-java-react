@@ -22,14 +22,14 @@ public class CreateTransaction {
                 String nonceObj = nonce;
 
                 String arr[] = nonceObj.split(":");
-                
+
                 String nonceFromTheClient = arr[1].replaceAll("[{}\"]", "");
                 System.out.println(nonceFromTheClient);
                 BraintreeGateway gateway = new BraintreeGateway(
                 Environment.SANDBOX,
-                "********",
-                "**********",
-                "***************"
+                "your merchant id",
+                "your public key",
+                "your private key"
         );
         TransactionInit createTransaction = new TransactionInit();
 

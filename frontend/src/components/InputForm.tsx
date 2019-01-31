@@ -6,6 +6,8 @@ let hostedFields = require("braintree-web/hosted-fields");
 
 import axios from "axios";
 
+import List from "./ListGroup";
+
 import {
   Col,
   Row,
@@ -24,6 +26,9 @@ interface IState {
   cvv: string;
   exp: string;
   hostedFieldsInstance: any;
+  hidden: boolean;
+  statusHistory: Array<any>;
+  transID: string;
 }
 
 interface IProps {
@@ -42,7 +47,10 @@ class InputForm extends React.Component<IProps, IState> {
       ccNum: 0,
       cvv: "",
       exp: "",
-      hostedFieldsInstance: ""
+      hostedFieldsInstance: "",
+      hidden: false,
+      statusHistory: [],
+      transID: ""
     };
   }
 
@@ -102,6 +110,14 @@ class InputForm extends React.Component<IProps, IState> {
       .catch((hostedFieldsErr: any) => console.log(hostedFieldsErr));
   }
 
+  displayData(statusHistory: Array<any>) {
+    if (this.state.hidden) {
+      return (
+        <List statusHistory={statusHistory} transID={this.state.transID} />
+      );
+    }
+  }
+
   tokenize(event: any) {
     event.preventDefault();
     let hostedFieldsInstance = this.state.hostedFieldsInstance;
@@ -109,65 +125,74 @@ class InputForm extends React.Component<IProps, IState> {
       if (tokenizeErr) {
         console.log(tokenizeErr);
       } else {
-        console.log(typeof payload.nonce);
         axios
           .post("/api/create", {
             nonce: payload.nonce
           })
           .then(response => {
             console.log(response.data);
+            const transID = response.data.target.id;
+            const statusHistory = response.data.target.statusHistory;
+
+            this.setState({ hidden: true, statusHistory, transID });
+
+            this.displayData(statusHistory);
           })
           .catch(err => console.log(err));
       }
     });
-    /*.catch((tokenizeErr: any) => {
-      console.log(tokenizeErr);
-    })*/
   }
 
   render() {
     return (
       <div>
-        <Col md={6}>
-          <Card
-            className="mt-5"
-            body
-            inverse
-            style={{ backgroundColor: "#333", borderColor: "#333" }}
-          >
-            <Form id="hostedForm" onSubmit={this.tokenize}>
-              <Row>
-                <Col md={12}>
-                  <FormGroup>
-                    <Label for="ccNum"> Card Number</Label>
-                    <div id="ccNumHosted" />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="cvv">CVV</Label>
-                    <div id="cvvHosted" />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                    <Label for="exp">Exp</Label>
-                    <div id="expHosted" />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={12}>
-                  <Button id="hostedSubmit" color="secondary" block>
-                    Pay!
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          </Card>
-        </Col>
+        <div>
+          {this.displayData(this.state.statusHistory)}
+          <Col md={6}>
+            <Card
+              className="mt-5"
+              body
+              inverse
+              style={{
+                backgroundColor: "#333",
+                borderColor: "#333",
+                visibility: this.state.hidden ? "hidden" : "visible"
+              }}
+            >
+              <Form id="hostedForm" onSubmit={this.tokenize}>
+                <Row>
+                  <Col md={12}>
+                    <FormGroup>
+                      <Label for="ccNum"> Card Number</Label>
+                      <div id="ccNumHosted" />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="cvv">CVV</Label>
+                      <div id="cvvHosted" />
+                    </FormGroup>
+                  </Col>
+                  <Col md={6}>
+                    <FormGroup>
+                      <Label for="exp">Exp</Label>
+                      <div id="expHosted" />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12}>
+                    <Button id="hostedSubmit" color="secondary" block>
+                      Pay!
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+          </Col>
+        </div>
       </div>
     );
   }

@@ -19,11 +19,14 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
-//components
 
+import { Spinner } from "../node_modules/reactstrap/lib/Spinner";
+//components
+import Spin from "./components/Loading";
 //routes
 let Home = React.lazy(() => import("./components/Home"));
-let Dash = React.lazy(() => import("./components/Dash"));
+
+let DropIn = React.lazy(() => import("./components/DropIn"));
 
 const styles = {
   root: {
@@ -71,18 +74,18 @@ class App extends React.Component<IProps, IState> {
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink href="/">Home</NavLink>
+                <NavLink href="/">Hosted Fields</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="dashboard">Dashboard</NavLink>
+                <NavLink href="DropIn">Drop-in UI</NavLink>
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
-        <React.Suspense fallback={<h2>TODO: Spinner</h2>}>
+        <React.Suspense fallback={<Spin />}>
           <Router>
             <Home path="/" />
-            <Dash path="dashboard" />
+            <DropIn path="DropIn" />
           </Router>
         </React.Suspense>
       </div>
